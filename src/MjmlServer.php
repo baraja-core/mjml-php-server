@@ -7,9 +7,7 @@ namespace Baraja\Mjml;
 
 final class MjmlServer
 {
-
-	/** @var string */
-	private $cacheDir;
+	private string $cacheDir;
 
 
 	public function __construct(?string $cacheDir = null)
@@ -39,10 +37,6 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @param string $template
-	 * @return string
-	 */
 	public function process(string $template): string
 	{
 		$templateContentHash = md5($template);
@@ -65,14 +59,9 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @param string $file
-	 * @return string
-	 */
 	private function processReturn(string $file): string
 	{
 		$return = str_replace(["\r\n", "\r"], "\n", $this->read($file));
-
 		if (preg_match('/Error: ([^\n]+)/', $return, $parser)) {
 			throw new \RuntimeException($parser[1]);
 		}
@@ -81,10 +70,6 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @param string $dir
-	 * @param int $mode
-	 */
 	private function createDir(string $dir, int $mode = 0777): void
 	{
 		if (!is_dir($dir) && !@mkdir($dir, $mode, true) && !is_dir($dir)) { // @ - dir may already exist
@@ -93,10 +78,6 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @param string $file
-	 * @return string
-	 */
 	private function read(string $file): string
 	{
 		$content = @file_get_contents($file); // @ is escalated to exception
@@ -108,11 +89,6 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @param string $file
-	 * @param string $content
-	 * @param int|null $mode
-	 */
 	private function write(string $file, string $content, ?int $mode = 0666): void
 	{
 		$this->createDir(dirname($file));
@@ -125,26 +101,18 @@ final class MjmlServer
 	}
 
 
-	/**
-	 * @return string
-	 */
 	private function getLastError(): string
 	{
 		return preg_replace('#^\w+\(.*?\): #', '', error_get_last()['message']);
 	}
 
 
-	/**
-	 * @param string $functionName
-	 * @return bool
-	 */
 	private function functionIsAvailable(string $functionName): bool
 	{
 		static $disabled;
-
 		if (\function_exists($functionName)) {
 			if ($disabled === null && \is_string($disableFunctions = ini_get('disable_functions'))) {
-				$disabled = explode(',', $disableFunctions) ?: [];
+				$disabled = explode(',', $disableFunctions);
 			}
 
 			return \in_array($functionName, $disabled, true) === false;
