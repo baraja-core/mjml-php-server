@@ -25,12 +25,12 @@ final class MjmlServer
 				echo json_encode([
 					'status' => 'ok',
 					'content' => (new self)->process($_POST['template'] ?? ''),
-				]);
+				], JSON_THROW_ON_ERROR);
 			} catch (\Throwable $e) {
 				echo json_encode([
 					'status' => 'error',
 					'message' => $e->getMessage(),
-				]);
+				], JSON_THROW_ON_ERROR);
 			}
 			die;
 		}
@@ -53,6 +53,7 @@ final class MjmlServer
 			throw new \RuntimeException('Function shell_exec() is disabled on this server.');
 		}
 
+		/** @phpstan-ignore-next-line */
 		shell_exec('/node_modules/.bin/mjml ' . escapeshellarg($sourceFile) . ' > ' . escapeshellarg($finalFile));
 
 		return $this->processReturn($finalFile);

@@ -5,6 +5,8 @@ MJML PHP server
 
 Imagine you want render your [MJML template](https://mjml.io) on your private PHP server, now you can.
 
+> **Please note:** This package is not officially supported as of 2021-04-01. Install MJML manually on the server, or use Docker.
+
 How to install
 --------------
 
